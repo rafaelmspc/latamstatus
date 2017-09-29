@@ -36,6 +36,12 @@ my $parsed = decode_json($content);
 
 my $result = $parsed->{result};
 
-foreach my $host (@{$result}) {
-    print $host->{host} . "\n";
+open HTML, ">" . $CONFIG{output};
+
+print HTML "<html><body><table><tr><th>Host<th>Status";
+
+foreach my $h (@{$result}) {
+    print HTML "<tr><td>" . $h->{host} . "<td>" . $h->{status};
 }
+
+
