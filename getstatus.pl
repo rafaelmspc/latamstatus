@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 use strict;
 use warnings;
+use Data::Dumper;               # Perl core module
 use Config::Simple;
 use HTTP::Request;
 use LWP::UserAgent;
@@ -31,6 +32,10 @@ $res->is_success or die $res->status_line. "\n";
 
 my $content = $res->decoded_content;
 
-my $result = decode_json($content);
+my $parsed = decode_json($content);
 
-print $result->{jsonrpc};
+my $result = $parsed->{result};
+
+foreach my $host (@{$result}) {
+    print $host->{host} . "\n";
+}
