@@ -4,7 +4,7 @@ use warnings;
 use Config::Simple;
 use HTTP::Request;
 use LWP::UserAgent;
-
+use JSON qw( decode_json );
 my %CONFIG;
 
 Config::Simple->import_from($ARGV[0], \%CONFIG);
@@ -27,10 +27,10 @@ EOF
 my $lwp = LWP::UserAgent->new;
 my $res = $lwp->request($req);
 
+$res->is_success or die $res->status_line. "\n";
 
-if ($res->is_success) {
-    print $res->decoded_content;
-}
-else {
-    print STDERR $res->status_line, "\n";
-}
+my $content = $res->decoded_content;
+
+my $result = decode_json($content);
+
+print $result->{jsonrpc};
